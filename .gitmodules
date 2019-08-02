@@ -1,0 +1,3 @@
+[submodule "ApartmentFrameworkEmbedded/src/ApartmentProtobuff"]
+	path = ApartmentFrameworkEmbedded/src/ApartmentProtobuff
+	url = git@github.com:william-mttrnet/ApartmentProtobuff.git

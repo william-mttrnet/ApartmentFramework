@@ -1,6 +1,0 @@
-// protobuff stuff
-syntax = "proto2";
-
-message DeviceStatus{
-    required int32 enumerated_status = 1;
-}
