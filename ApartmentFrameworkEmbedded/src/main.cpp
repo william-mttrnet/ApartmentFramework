@@ -5,20 +5,19 @@
 // tcp wrapper to make things more modular on the esp32
 #include "tcpframe.h"
 
-// our serializeation stuff
-#include "pb_common.h"
-#include "pb_decode.h"
-#include "pb_encode.h"
-#include "ProtobufHeaders/status.pb.h"
-
 Serial debugger(USBTX, USBRX);
 
+Thread tcp_frame_thread_handler; 
 TCPFrame tcp_eth; 
+
+void tcp_frame_thread_func(){
+  tcp_eth.spin();
+}
 
 int main() {
 
-  tcp_eth.begin();
-    
+  tcp_eth.begin("192.168.2.7", 69);
+  
   for(;;){
     Thread::wait(1);
   }
