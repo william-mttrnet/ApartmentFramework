@@ -16,9 +16,11 @@ class WS2812B{
         
         // push up the changes to the SPI device
         void Update(void);
+        
+        uint16_t num_leds;
+        
     private:
         SPI *SPIDriver;
-        uint16_t num_leds;
         uint8_t *bytearray;
         uint8_t brightness; 
 

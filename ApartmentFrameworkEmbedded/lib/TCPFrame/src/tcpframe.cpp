@@ -1,6 +1,6 @@
 #include "tcpframe.h"
 
-void TCPFrame::Begin(const char *host, uint16_t port){
+void TCPFrame::Begin(uint16_t port){
     // setting up the ethernet interface
     printf("Setting up ethernet jack...");
     this->eth.connect();
@@ -17,61 +17,55 @@ void TCPFrame::Begin(const char *host, uint16_t port){
     printf("Netmask: %s\n", netmask ? netmask : "None");
     printf("Gateway: %s\n", gateway ? gateway : "None");
 
-    printf("Setting up TCP this->socket...");
-    // open up the ethernet port to the TCP this->socket
-    this->socket.open(&this->eth);
+    printf("Setting up TCP server!...");
 
-    // connect the this->socket obeject to an ip address at
-    // a defined port
-    if(this->socket.connect(host, port)){
-        printf("done!\n");
-    }
+    if(this-server.open(&this->eth) < 0)
+        printf("TCP Server could not open with the ethernet interface :(");
 
-    // if it doesn't work, keep trying
-    // I'm aware this can leed to a loop runtime error
-    // but the entire thing relies on having an active 
-    else{
-        printf("connectio failed :( Retrying \n");
-        while(!this->socket.connect(host, port)){
-            
-            printf("connectio failed :( Retrying\n");
-            wait(1);
-        }
-        printf("done!\n");
-    }
+    if(this->server.bind(eth.get_ip_address(), port))
+        printf("TCP Server could not start broadcasting :(");
+    
+    if(this->server.listen(3) < 0)
+        printf("server had issues setting up a listener :(");
+
 }
 
 void TCPFrame::Spin(void){
-    
-    if(this->packet_size = socket.recv(&this->packet_arr, sizeof(packet_arr)) >= 18){
-        
+    // accepting a connection
+    // if there is no new connection, then 
+    // this doesn't do anything, other than return a number that doesn't
+    // matter
+    server.accept(&socket, &addr);
+    this->packet_size = server.recv(&this->packet_arr, PACKET_SIZE);
+    if(this->packet_size >= 18){
         // Message ID is contained within the first 16 bytes
         for(int i = 0; i < 16; i++){
             this->msg_arr[i] = this->packet_arr[i];
         }
 
-        // message size is contained within the next 2 bytes
-        this->message_size = (this->packet_arr[16] << 8) | (this->packet_arr[17]);
+        uint8_t val = 0; 
+        for(int i = 0; i < 15; i++){
+            if(this->msg_arr[i] == 16)
+                val++;
+        }
+
+        // if 15 bytes have dec values of 16, it's an LED message!
+        // and we can choose which strip to modify here
+        if(val == 15)
+            this->SetStrip(msg_arr[15]);
     }
-
-    uint8_t val = 0; 
-    for(int i = 0; i < 16; i++){
-        if(this->msg_arr[i] == 16)
-            val++;
-    }
-
-    // if all 16 bytes have dec values of 16, it's an LED message!
-    if(val == 16)
-        this->SendLED();
-
-    // gotta give the rtos time 
-    // to other stuff
-    // this should give us plenty of FPS with LEDs
-    // and the ability to check for other messages as well
 
     wait_ms(15);    
 }
 
-void TCPFrame::SendLED(void){
+void TCPFrame::AttachAnimationHandler(WS2812BAnimationHandler *handler){
+    this->strip_handler_list.push_back(handler);
+}
 
+void TCPFrame::RemoveAnimationHandler(uint8_t handler_num){
+    this->strip_handler_list.erase(this->strip_handler_list.begin() + handler_num);
+}
+
+void TCPFrame::SetStrip(uint8_t strip){
+    this->strip_handler_list[strip]->NewFrame(this->packet_arr, 18, sizeof(this->packet_arr));
 }

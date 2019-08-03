@@ -4,8 +4,7 @@ import time
 TCP_IP = 'localhost'
 TCP_PORT = 5005
 BUFFER_SIZE = 65000
-MSG = "Hello Wo;sldkfl;kjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjasdfasdf;lkjsa;dlfkjasldkfj;laskdf;laskdfja;lskdfj;lsakdfj;aslkdfg;rld!"
-
+MSG = "Wassup"
 tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcp.connect((TCP_IP, TCP_PORT))
 
