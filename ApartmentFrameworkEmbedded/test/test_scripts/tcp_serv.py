@@ -20,6 +20,5 @@ while 1:
     print("received data:", data)
     time.sleep(.01)
     
-    
 
 conn.close()
