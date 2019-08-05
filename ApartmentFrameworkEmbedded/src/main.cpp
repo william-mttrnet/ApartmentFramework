@@ -12,7 +12,7 @@
 
 #include "WS2812B_Animation.h"
 
-#include "ApartmentProtobuff/status.pb.h"
+#include "ApartmentProtobuff/ProtobufHeaders/status.pb.h"
 
 Serial debugger(USBTX, USBRX);
 
