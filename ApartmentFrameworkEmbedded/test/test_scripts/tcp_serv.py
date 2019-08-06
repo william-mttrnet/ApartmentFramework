@@ -15,9 +15,10 @@ conn, addr = tcp.accept()
 print ('Connection address:', addr)
 while 1:
     data = conn.recv(BUFFER_SIZE)
-    if(len(data) == 0):
+    if not data:
         break
     print("received data:", data)
+    conn.send(data)  # echo
     time.sleep(.01)
     
 

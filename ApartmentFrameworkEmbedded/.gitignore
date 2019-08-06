@@ -3,6 +3,7 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
-.test/test_scripts/bin
-.test/test_scripts/build
-.test/test_scripts/tcp_client
+test/test_scripts/bin
+test/test_scripts/build
+test/test_scripts/tcp_client
+test/test_scripts/makefile
