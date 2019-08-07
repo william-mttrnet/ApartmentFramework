@@ -1,7 +1,7 @@
 import socket
 import time 
 
-TCP_IP = 'localhost'
+TCP_IP = '192.168.1.2'
 TCP_PORT = 5005
 BUFFER_SIZE = 65000
 MSG = "Wassup"

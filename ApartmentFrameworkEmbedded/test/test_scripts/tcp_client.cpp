@@ -27,7 +27,8 @@ void *get_in_addr(struct sockaddr *sa)
 
 int main(int argc, char *argv[])
 {
-    int sockfd, numbytes;  
+    int sockfd, numbytes; 
+    std::string msg; 
     char buf[MAXDATASIZE];
     struct addrinfo hints, *servinfo, *p;
     int rv;
@@ -39,7 +40,7 @@ int main(int argc, char *argv[])
     }
 
     memset(&hints, 0, sizeof hints);
-    hints.ai_family = AF_UNSPEC;
+    hints.ai_family = AF_INET;
     hints.ai_socktype = SOCK_STREAM;
 
     if ((rv = getaddrinfo(argv[1], PORT, &hints, &servinfo)) != 0) {
@@ -75,7 +76,6 @@ int main(int argc, char *argv[])
 
     while (true) {
         
-        std::string msg;
         std::cout << "What is your message : ";
         std::getline(std::cin, msg);
         std::cout << "sending " << msg << "\n";
@@ -84,6 +84,8 @@ int main(int argc, char *argv[])
         if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
             break;
         }
+
+        std::cout << "recieved " << buf << "\n";
 
     }
 
