@@ -31,9 +31,9 @@ class TCPFrame{
         // ethernet interface
         EthernetInterface eth; 
         // socket interface B
-        TCPSocket socket;
+        TCPSocket *socket;
         // server interface 
-        TCPServer server; 
+        TCPSocket server; 
         // ip address
         SocketAddress addr; 
         
