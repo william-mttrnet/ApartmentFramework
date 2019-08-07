@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <netinet/in.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 
 #include <arpa/inet.h>
 
@@ -33,6 +34,7 @@ int main(int argc, char *argv[])
     struct addrinfo hints, *servinfo, *p;
     int rv;
     char s[INET6_ADDRSTRLEN];
+    struct timeval stop, start;
 
     if (argc != 2) {
         fprintf(stderr,"usage: client hostname\n");
@@ -79,13 +81,20 @@ int main(int argc, char *argv[])
         std::cout << "What is your message : ";
         std::getline(std::cin, msg);
         std::cout << "sending " << msg << "\n";
+
+        gettimeofday(&start, NULL);
+
         send(sockfd, msg.data(), msg.size(), 0);
 
         if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
             break;
         }
 
-        std::cout << "recieved " << buf << "\n";
+        gettimeofday(&stop, NULL);
+
+        std::cout << "recieved " << buf << " in " << (stop.tv_usec - start.tv_usec)/1000 << " milliseconds\n";
+
+
 
     }
 
