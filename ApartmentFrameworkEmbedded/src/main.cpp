@@ -12,7 +12,7 @@
 
 #include "WS2812B_Animation.h"
 
-#include "ApartmentProtobuff/ProtobufHeaders/status.pb.h"
+#include "ApartmentProtobuff/status.pb.h"
 
 Serial debugger(USBTX, USBRX);
 
@@ -21,10 +21,13 @@ Thread tcp_frame_thread_handler;
 TCPFrame tcp_eth; 
 
 int main() {
+  // letting me know that the mbed at least booted up!
+  debugger.printf("Starting up subsystems!");
+
   // kickoff all the strip stuff!
-  SetupStrips();
+  // SetupStrips();
   //  kick off our tcp thread!
-  tcp_eth.Begin(69);
+  tcp_eth.Begin(5005);
   
   for(;;){
     tcp_eth.Spin();

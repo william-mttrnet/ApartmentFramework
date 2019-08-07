@@ -13,21 +13,42 @@ void TCPFrame::Begin(uint16_t port){
 
     // print out typical data to the terminal
     // hopefully will help with debugging 
-    printf("this->Socket %s\n", ip ? ip : "None");
+    
+    printf("IP Address:  %s\n", ip ? ip : "None");
     printf("Netmask: %s\n", netmask ? netmask : "None");
     printf("Gateway: %s\n", gateway ? gateway : "None");
 
-    printf("Setting up TCP server!...");
+    printf("Setting up TCP server!...\n");
 
-    if(this-server.open(&this->eth) < 0)
-        printf("TCP Server could not open with the ethernet interface :(");
+    uint8_t counter = 0;
 
-    if(this->server.bind(eth.get_ip_address(), port))
-        printf("TCP Server could not start broadcasting :(");
+    if(this->server.open(&this->eth) < 0)
+        printf("TCP Server could not open with the ethernet interface :(\n");
+    else
+        counter++;
     
-    if(this->server.listen(3) < 0)
-        printf("server had issues setting up a listener :(");
+    if(this->server.bind(eth.get_ip_address(), port))
+        printf("TCP Server could not start broadcasting :(\n");
+    else
+        counter++;
+    
+    if(this->server.listen(10) < 0)
+        printf("server had issues setting up a listener :(\n");
+    else
+        counter++;
+    
+    if(counter == 3)
+        printf("TCP Setup properly!\n");
 
+    this->server.set_blocking(true);
+    this->server.set_timeout(-1);
+
+    
+    // accept a socket, set method calls as blocking
+    // and timeout to zero
+    this->socket = this->server.accept();
+    this->socket->set_blocking(true);
+    this->socket->set_timeout(-1);
 }
 
 void TCPFrame::Spin(void){
@@ -35,8 +56,17 @@ void TCPFrame::Spin(void){
     // if there is no new connection, then 
     // this doesn't do anything, other than return a number that doesn't
     // matter
-    server.accept(&socket, &addr);
-    this->packet_size = server.recv(&this->packet_arr, PACKET_SIZE);
+    char arr[140];
+    memset(arr, 0, sizeof(arr));
+    this->packet_size = this->socket->recv(arr, sizeof(arr));
+    if(this->packet_size >1){
+        printf(arr);
+        printf("\n");
+    }
+
+    this->socket->send(arr, this->packet_size);
+
+    /*
     if(this->packet_size >= 18){
         // Message ID is contained within the first 16 bytes
         for(int i = 0; i < 16; i++){
@@ -54,7 +84,7 @@ void TCPFrame::Spin(void){
         if(val == 15)
             this->SetStrip(msg_arr[15]);
     }
-
+    */
     wait_ms(15);    
 }
 
