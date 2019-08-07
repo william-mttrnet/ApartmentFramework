@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 #include <unistd.h>
 #include <errno.h>
 #include <string.h>
@@ -48,8 +49,7 @@ int main(int argc, char *argv[])
 
     // loop through all the results and connect to the first we can
     for(p = servinfo; p != NULL; p = p->ai_next) {
-        if ((sockfd = socket(p->ai_family, p->ai_socktype,
-                p->ai_protocol)) == -1) {
+        if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
             perror("client: socket");
             continue;
         }
@@ -68,20 +68,24 @@ int main(int argc, char *argv[])
         return 2;
     }
 
-    inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr),
-            s, sizeof s);
+    inet_ntop(p->ai_family, get_in_addr((struct sockaddr *)p->ai_addr), s, sizeof s);
     printf("client: connecting to %s\n", s);
 
     freeaddrinfo(servinfo); // all done with this structure
 
-    if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
-        perror("recv");
-        exit(1);
+    while (true) {
+        
+        std::string msg;
+        std::cout << "What is your message : ";
+        std::getline(std::cin, msg);
+        std::cout << "sending " << msg << "\n";
+        send(sockfd, msg.data(), msg.size(), 0);
+
+        if ((numbytes = recv(sockfd, buf, MAXDATASIZE-1, 0)) == -1) {
+            break;
+        }
+
     }
-
-    buf[numbytes] = '\0';
-
-    printf("client: received '%s'\n",buf);
 
     close(sockfd);
 
