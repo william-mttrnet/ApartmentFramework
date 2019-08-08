@@ -10,8 +10,6 @@
 #include "WS2812B.h"
 #include "APA102.h"
 
-#include "WS2812B_Animation.h"
-
 #include "ApartmentProtobuff/status.pb.h"
 
 Serial debugger(USBTX, USBRX);
@@ -22,14 +20,19 @@ TCPFrame tcp_eth;
 
 int main() {
   // letting me know that the mbed at least booted up!
-  debugger.printf("Starting up subsystems!");
+  debugger.printf("Starting up subsystems!\n");
 
   // kickoff all the strip stuff!
-  // SetupStrips();
+  SetupStrips();
+
+  /*
   //  kick off our tcp thread!
   tcp_eth.Begin(5005);
   
   for(;;){
     tcp_eth.Spin();
   }
+
+  */
+  return 0;
 }
