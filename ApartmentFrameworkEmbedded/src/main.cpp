@@ -10,7 +10,7 @@
 #include "WS2812B.h"
 #include "APA102.h"
 
-#include "ApartmentProtobuff/status.pb.h"
+#include "ApartmentProtobuff/ProtobufHeaders/status.pb.h"
 
 Serial debugger(USBTX, USBRX);
 

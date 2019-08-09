@@ -2,5 +2,9 @@
     "terminal.integrated.env.linux": {
         "PATH": "/home/williamredenbaugh/.platformio/penv/bin:/home/williamredenbaugh/.platformio/penv:/home/williamredenbaugh/.local/bin:/home/williamredenbaugh/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin",
         "PLATFORMIO_CALLER": "vscode"
+    },
+    "terminal.integrated.env.osx": {
+        "PATH": "/Users/ryan/.platformio/penv/bin:/Users/ryan/.platformio/penv:/Users/ryan/esp/xtensa-esp32-elf/bin:/Library/Frameworks/Python.framework/Versions/3.7/bin:/Library/Frameworks/Python.framework/Versions/3.6/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+        "PLATFORMIO_CALLER": "vscode"
     }
 }
