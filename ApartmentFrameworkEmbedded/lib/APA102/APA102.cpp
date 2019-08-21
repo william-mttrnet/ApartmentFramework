@@ -32,6 +32,11 @@ void APA102::Set(uint8_t r, uint8_t g, uint8_t b, uint16_t pos){
     this->bytearray[led_pos + 3] = red;  
 }
 
+void APA102::SetStrip(uint8_t r, uint8_t g, uint8_t b){
+    for(uint16_t i = 0; i < this->num_leds; i++)
+        this->Set(r, g, b, i);
+}
+
 void APA102::Update(void){
     this->SPIDriver->transfer(this->bytearray, this->num_leds * 4 + 8, this->bytearray, 0, NULL);
 }
@@ -39,3 +44,4 @@ void APA102::Update(void){
 void APA102::SetBrightness(uint8_t brightness){
     this->brightness = brightness;
 }
+

@@ -24,15 +24,14 @@ int main() {
 
   // kickoff all the strip stuff!
   SetupStrips();
-
-  /*
   //  kick off our tcp thread!
+  // setting ethernet manually
+  tcp_eth.SetStaticNetwork("192.168.7.2", "255.255.252.0", "192.168.7.1");
   tcp_eth.Begin(5005);
   
   for(;;){
     tcp_eth.Spin();
+    wait(1);
   }
-
-  */
   return 0;
 }

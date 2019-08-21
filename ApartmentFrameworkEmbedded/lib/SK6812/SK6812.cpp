@@ -35,7 +35,7 @@ void SK6812::begin(uint16_t num_leds, uint8_t *bytearray, SPI *SPIDriver){
     this->SPIDriver->format(8, 0);
     // needs to as close to 2.4mhz as possible 
     // due to strict timing requirements of SK6812s
-    this->SPIDriver->frequency(2400000);
+    this->SPIDriver->frequency(1200000);
 
 }
 
@@ -61,7 +61,7 @@ void SK6812::Set(uint8_t r, uint8_t g, uint8_t b, uint8_t w, uint16_t pos){
 }
 
 void SK6812::Update(void){
-    this->SPIDriver->transfer(this->bytearray, this->num_leds * 4 + 8, this->bytearray, 0, NULL);
+    this->SPIDriver->transfer(this->bytearray, this->num_leds * 4 + 100, this->bytearray, 0, NULL);
 }
 
 void SK6812::SetBrightness(uint8_t brightness){
