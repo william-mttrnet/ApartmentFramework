@@ -16,6 +16,8 @@ class APA102{
         
         // push up the changes to the SPI device
         void Update(void);
+
+        void SetStrip(uint8_t r, uint8_t g, uint8_t b);
     private:
         SPI *SPIDriver;
         uint16_t num_leds;

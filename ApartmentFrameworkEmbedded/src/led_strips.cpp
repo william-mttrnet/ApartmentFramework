@@ -35,7 +35,7 @@ APA102 StripThree;
 // These don't update anywhere nearly as fast
 // But they are rgbw, meaning they get white!
 // And because of this, they get wayy brighter!
-#define STRIP_FOUR_LEDS 334
+#define STRIP_FOUR_LEDS 12
 #define STRIP_FIVE_LEDS 334
 #define STRIP_SIX_LEDS 334
 
@@ -54,7 +54,6 @@ SPI strip_six_spi();
 uint8_t strip_six_arr[STRIP_SIX_LEDS * 16 + 100];
 SK6812 StripSix;
 
-
 void StripOneFunc(){
   // setting up all of the LED strips
   // then combining them all with the propper arrays
@@ -65,6 +64,21 @@ void StripOneFunc(){
     StripOne.Set(0, 0, 0, i);
   StripOne.Update();
   printf("Strip One has been setup successfully\n");
+
+  for(;;){
+    for(int i = 0; i < 255; i++){
+      StripOne.SetStrip(i, i, i);
+      StripOne.Update();
+      wait_ms(10);
+    }
+    wait(1);
+    for(int i = 0; i < 255; i++){
+      StripOne.SetStrip(255-i, 255-i, 255-i);
+      StripOne.Update();
+      wait_ms(10);
+    }
+    wait(1);
+  }
 }
 
 void StripTwoFunc(){
@@ -78,6 +92,21 @@ void StripTwoFunc(){
     StripTwo.Set(0, 0, 0, i);
   StripTwo.Update();
   printf("Strip Two has been setup successfully\n");
+
+  for(;;){
+    for(int i = 0; i < 255; i++){
+      StripTwo.SetStrip(i, i, i);
+      StripTwo.Update();
+      wait_ms(10);
+    }
+    wait(1);
+    for(int i = 0; i < 255; i++){
+      StripTwo.SetStrip(255-i, 255-i, 255-i);
+      StripTwo.Update();
+      wait_ms(10);
+    }
+    wait(1);
+  }  
 }
 
 void StripThreeFunc(){
@@ -90,6 +119,20 @@ void StripThreeFunc(){
     StripThree.Set(0, 0, 0, i);
   StripThree.Update();
   printf("Strip Three has been setup successfully\n");
+  for(;;){
+    for(int i = 0; i < 255; i++){
+      StripThree.SetStrip(i, i, i);
+      StripThree.Update();
+      wait_ms(10);
+    }
+    wait(1);
+    for(int i = 0; i < 255; i++){
+      StripThree.SetStrip(255-i, 255-i, 255-i);
+      StripThree.Update();
+      wait_ms(10);
+    }
+    wait(1);
+  }  
 }
 
 void StripFourFunc(){
@@ -101,6 +144,20 @@ void StripFourFunc(){
   for(uint16_t i = 0; i < STRIP_FOUR_LEDS; i++)
     StripFour.Set(0, 0, 0, 0, i);
   StripFour.Update();
+
+  for(;;){
+    for(uint16_t i = 0; i < STRIP_FOUR_LEDS; i++)
+      StripFour.Set(0, 0, 0, 0, i);
+    StripFour.Update();
+    
+    wait(1);
+    
+    for(uint16_t i = 0; i < STRIP_FOUR_LEDS; i++)
+      StripFour.Set(100, 100, 100, 100, i);
+    StripFour.Update();
+    
+    wait(1);
+  }
   printf("Strip Four has been setup successfully\n");
 }
 
@@ -134,11 +191,11 @@ void SetupStrips(void){
     wait(1);
     strip_two_thread.start(StripTwoFunc);
     wait(1);
-    strip_three_thread.start(StripThreeFunc);
-    wait(1);
-    strip_four_thread.start(StripFourFunc);
-    wait(1);
-    strip_five_thread.start(StripFiveFunc);
+    //strip_three_thread.start(StripThreeFunc);
+    //wait(1);
+    //strip_four_thread.start(StripFourFunc);
+    //wait(1);
+    //strip_five_thread.start(StripFiveFunc);
     
     // currently I don't have access to these SPI pins, so we 
     // won't bother with this!

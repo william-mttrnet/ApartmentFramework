@@ -1,8 +1,10 @@
 #include "tcpframe.h"
 
 void TCPFrame::Begin(uint16_t port){
+    
     // setting up the ethernet interface
     printf("Setting up ethernet jack...");
+    
     this->eth.connect();
     printf("done!\n");
 
@@ -43,7 +45,6 @@ void TCPFrame::Begin(uint16_t port){
     this->server.set_blocking(true);
     this->server.set_timeout(-1);
 
-    
     // accept a socket, set method calls as blocking
     // and timeout to zero
     this->socket = this->server.accept();
@@ -51,51 +52,43 @@ void TCPFrame::Begin(uint16_t port){
     this->socket->set_timeout(-1);
 }
 
+void TCPFrame::SetStaticNetwork(const char *ip, const char *netmask, const char *gateway){
+    // setting ethernet manually
+    this->eth.set_network(ip, netmask, gateway);
+}
+
 void TCPFrame::Spin(void){
     // accepting a connection
     // if there is no new connection, then 
     // this doesn't do anything, other than return a number that doesn't
-    // matter
-    char arr[140];
-    memset(arr, 0, sizeof(arr));
-    this->packet_size = this->socket->recv(arr, sizeof(arr));
-    if(this->packet_size >1){
-        printf(arr);
-        printf("\n");
-    }
+    // matter!
 
-    this->socket->send(arr, this->packet_size);
-
-    /*
-    if(this->packet_size >= 18){
-        // Message ID is contained within the first 16 bytes
-        for(int i = 0; i < 16; i++){
+    // get the latest packet!
+    this->packet_size = this->socket->recv(this->packet_arr, sizeof(this->packet_arr));
+    
+    // if there is 
+    if(this->packet_size >= 6){
+        // Message ID is contained within the first 4 bytes
+        for(int i = 0; i < 4; i++){
             this->msg_arr[i] = this->packet_arr[i];
         }
+        
+        this->check_led();
+    }   
+}
 
-        uint8_t val = 0; 
-        for(int i = 0; i < 15; i++){
-            if(this->msg_arr[i] == 16)
-                val++;
-        }
 
-        // if 15 bytes have dec values of 16, it's an LED message!
-        // and we can choose which strip to modify here
-        if(val == 15)
-            this->SetStrip(msg_arr[15]);
+void TCPFrame::check_led(){
+    uint8_t val = 0; 
+    for(int i = 0; i < 3; i++){
+        if(this->msg_arr[i] == 16)
+            val++;
     }
-    */
-    wait_ms(15);    
-}
 
-void TCPFrame::AttachAnimationHandler(WS2812BAnimationHandler *handler){
-    this->strip_handler_list.push_back(handler);
-}
-
-void TCPFrame::RemoveAnimationHandler(uint8_t handler_num){
-    this->strip_handler_list.erase(this->strip_handler_list.begin() + handler_num);
-}
-
-void TCPFrame::SetStrip(uint8_t strip){
-    this->strip_handler_list[strip]->NewFrame(this->packet_arr, 18, sizeof(this->packet_arr));
+    // if 15 bytes have dec values of 16, it's an LED message!
+    // and we can choose which strip to modify here
+    if(val == 3)
+        // if the stars align, 
+        // then we set this int8 value to let us know which led strip we are using
+        this->latest_strip_frame = this->msg_arr[3];
 }
