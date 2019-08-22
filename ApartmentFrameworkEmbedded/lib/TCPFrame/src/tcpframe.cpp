@@ -45,11 +45,14 @@ void TCPFrame::Begin(uint16_t port){
     this->server.set_blocking(true);
     this->server.set_timeout(-1);
 
+    // wiats for a socket. 
     // accept a socket, set method calls as blocking
     // and timeout to zero
     this->socket = this->server.accept();
     this->socket->set_blocking(true);
     this->socket->set_timeout(-1);
+
+    printf("A socket has been accepted\n");
 }
 
 void TCPFrame::SetStaticNetwork(const char *ip, const char *netmask, const char *gateway){

@@ -3,5 +3,4 @@
 // setup the strip from the main file
 void SetupStrips(void);
 
-// get a pointer to the animation handler
-WS2812BAnimationHandler* GetAnimationHandler(uint8_t strip_handle);
+APA102* get_strips(uint8_t r);

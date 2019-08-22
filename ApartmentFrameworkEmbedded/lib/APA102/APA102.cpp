@@ -1,5 +1,8 @@
 #include "APA102.h"
 
+// Nice cute little flags
+#define LED_FLAG_ONE (1UL << 0)
+
 void APA102::begin(uint16_t num_leds, uint8_t *bytearray, SPI *SPIDriver){
     this->SPIDriver = SPIDriver;
     this->num_leds = num_leds;
@@ -30,6 +33,16 @@ void APA102::Set(uint8_t r, uint8_t g, uint8_t b, uint16_t pos){
     this->bytearray[led_pos + 2] = green; 
     // set red
     this->bytearray[led_pos + 3] = red;  
+}
+
+void APA102::WaitOnPacket(void){
+    this->update_signal.wait_any(LED_FLAG_ONE);
+    this->update_signal.clear(LED_FLAG_ONE);
+}
+
+void APA102::SignalPacketReady(void){
+    // Signals that the flag is ready
+    this->update_signal.set(LED_FLAG_ONE);
 }
 
 void APA102::SetStrip(uint8_t r, uint8_t g, uint8_t b){

@@ -54,6 +54,17 @@ SPI strip_six_spi();
 uint8_t strip_six_arr[STRIP_SIX_LEDS * 16 + 100];
 SK6812 StripSix;
 
+APA102* get_strips(uint8_t r){
+  switch(r){
+    case(0):
+      return &StripOne;
+    case(1):
+      return &StripTwo;
+    case(2):
+      return &StripThree;
+  }
+}
+
 void StripOneFunc(){
   // setting up all of the LED strips
   // then combining them all with the propper arrays
@@ -65,19 +76,12 @@ void StripOneFunc(){
   StripOne.Update();
   printf("Strip One has been setup successfully\n");
 
+  // Now we just wait on for new data 
+  // from the ethernet interface and go nuts!
   for(;;){
-    for(int i = 0; i < 255; i++){
-      StripOne.SetStrip(i, i, i);
-      StripOne.Update();
-      wait_ms(10);
-    }
-    wait(1);
-    for(int i = 0; i < 255; i++){
-      StripOne.SetStrip(255-i, 255-i, 255-i);
-      StripOne.Update();
-      wait_ms(10);
-    }
-    wait(1);
+    StripOne.WaitOnPacket();
+    printf("Strip one has recieved a new update! \n");  
+    StripOne.Update();
   }
 }
 
@@ -93,19 +97,12 @@ void StripTwoFunc(){
   StripTwo.Update();
   printf("Strip Two has been setup successfully\n");
 
+  // Now we just wait on for new data 
+  // from the ethernet interface and go nuts!
   for(;;){
-    for(int i = 0; i < 255; i++){
-      StripTwo.SetStrip(i, i, i);
-      StripTwo.Update();
-      wait_ms(10);
-    }
-    wait(1);
-    for(int i = 0; i < 255; i++){
-      StripTwo.SetStrip(255-i, 255-i, 255-i);
-      StripTwo.Update();
-      wait_ms(10);
-    }
-    wait(1);
+    StripTwo.WaitOnPacket();
+    printf("Strip two has recieved a new update! \n");
+    StripTwo.Update();
   }  
 }
 
@@ -119,19 +116,13 @@ void StripThreeFunc(){
     StripThree.Set(0, 0, 0, i);
   StripThree.Update();
   printf("Strip Three has been setup successfully\n");
+  
+  // Now we just wait on for new data 
+  // from the ethernet interface and go nuts!
   for(;;){
-    for(int i = 0; i < 255; i++){
-      StripThree.SetStrip(i, i, i);
-      StripThree.Update();
-      wait_ms(10);
-    }
-    wait(1);
-    for(int i = 0; i < 255; i++){
-      StripThree.SetStrip(255-i, 255-i, 255-i);
-      StripThree.Update();
-      wait_ms(10);
-    }
-    wait(1);
+    StripThree.WaitOnPacket();
+    printf("Strip three has recieved a new update! \n");
+    StripThree.Update();
   }  
 }
 
@@ -191,8 +182,8 @@ void SetupStrips(void){
     wait(1);
     strip_two_thread.start(StripTwoFunc);
     wait(1);
-    //strip_three_thread.start(StripThreeFunc);
-    //wait(1);
+    strip_three_thread.start(StripThreeFunc);
+    wait(1);
     //strip_four_thread.start(StripFourFunc);
     //wait(1);
     //strip_five_thread.start(StripFiveFunc);
