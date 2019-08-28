@@ -1,4 +1,4 @@
-#include "apa102.h"
+#include "sk6812.hpp"
 #include <wiringPiSPI.h>
 #include <stdint.h>
 
@@ -63,11 +63,11 @@ void Sk6812Pi::begin(uint8_t *led_array, uint32_t num_leds, uint8_t brightness, 
     // SPI INIT END   // 
     
     for(uint32_t i = 0; i < this->num_leds; i++){
-        this->set(0, 0, 0, 0, i);
+        this->set(0, 0, 0, i);
     }
 
     // Setting up end sequence
-    for(uint8_t i = 0; i < 200, i++)
+    for(uint8_t i = 0; i < 200; i++)
         this->led_array[this->led_array_size - (i + 1)] = 255;
     this->update();
 }
@@ -77,15 +77,14 @@ void Sk6812Pi::set(uint8_t r, uint8_t g, uint8_t b, uint32_t led){
     uint8_t red = ((r * this->brightness) >> 8); 
     uint8_t green = ((g * this->brightness) >> 8);
     uint8_t blue = ((b * this->brightness) >> 8);
-    uint8_t white = ((w * this->brightness) >> 8);
 
     for(int i = 0; i < 4; i++){
         // green is first color
-        this->led_array[12 * pos + i] = write_led_bits(green, i); 
+        this->led_array[12 * led + i] = write_led_bits(green, i); 
         // red is 2nd color in this array 
-        this->led_array[12 * pos + 4+ i] = write_led_bits(red, i);
+        this->led_array[12 * led + 4+ i] = write_led_bits(red, i);
         // blue is third color
-        this->led_array[12 * pos + 8 + i] = write_led_bits(blue, i);
+        this->led_array[12 * led + 8 + i] = write_led_bits(blue, i);
     }
 }
 

@@ -3,10 +3,10 @@
 #Change output_file_name.a below to your desired executible filename
 
 #Set all your object files (the object files of all the .c files in your project, e.g. main.o my_sub_functions.o )
-OBJ = main.o apa102.o udp_frame.o sk6812rgbw.o sk6812.o
+OBJ = main.o apa102.o udp_frame.o udp_low.o sk6812rgbw.o sk6812.o
 
 #Set any dependant header files so that if they are edited they cause a complete re-compile (e.g. main.h some_subfunctions.h some_definitions_file.h ), or leave blank
-DEPS = apa102.h udp_frame.h sk6812rgbw.h sk6812.h
+DEPS = apa102.h udp_frame.h udp_low.h sk6812rgbw.hpp sk6812.hpp rgb_strip_common.hpp
 
 #Any special libraries you are using in your project (e.g. -lbcm2835 -lrt `pkg-config --libs gtk+-3.0` ), or leave blank
 LIBS = -lwiringPi

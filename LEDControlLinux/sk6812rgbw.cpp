@@ -1,4 +1,4 @@
-#include "apa102.h"
+#include "sk6812rgbw.hpp"
 #include <wiringPiSPI.h>
 #include <stdint.h>
 
@@ -65,10 +65,6 @@ void Sk6812RgbwPi::begin(uint8_t *led_array, uint32_t num_leds, uint8_t brightne
     for(uint32_t i = 0; i < this->num_leds; i++){
         this->set(0, 0, 0, 0, i);
     }
-
-    // Setting up end sequence
-    for(uint8_t i = 0; i < 200, i++)
-        this->led_array[this->led_array_size - (i + 1)] = 255;
     this->update();
 }
 
@@ -81,13 +77,13 @@ void Sk6812RgbwPi::set(uint8_t r, uint8_t g, uint8_t b, uint8_t w, uint32_t led)
 
     for(int i = 0; i < 4; i++){
         // green is first color
-        this->led_array[16 * pos + i] = write_led_bits(green, i); 
+        this->led_array[16 * led + i] = write_led_bits(green, i); 
         // red is 2nd color in this array 
-        this->led_array[16 * pos + 4+ i] = write_led_bits(red, i);
+        this->led_array[16 * led + 4+ i] = write_led_bits(red, i);
         // blue is third color
-        this->led_array[16 * pos + 8 + i] = write_led_bits(blue, i);
+        this->led_array[16 * led + 8 + i] = write_led_bits(blue, i);
         // white is final "color"
-        this->led_array[16 * pos + 12 + i] = write_led_bits(blue, i);
+        this->led_array[16 * led + 12 + i] = write_led_bits(white, i);
     }
 }
 
@@ -99,7 +95,7 @@ void  Sk6812RgbwPi::update(void){
     spi.rx_buf = NULL; 
     spi.len = this->led_array_size; 
     spi.delay_usecs = 0; 
-    spi.speed_hz = 10000000; 
+    spi.speed_hz = 2400000; 
     spi.bits_per_word = spiBPW; 
     
     // Sending out the data
