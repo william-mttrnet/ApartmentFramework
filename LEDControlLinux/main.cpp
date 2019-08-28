@@ -8,7 +8,7 @@
 #include "udp_frame.h"
 #include "udp_low.hpp"
 
-#define NUM_LEDS 500
+#define NUM_LEDS 650
 
 // LED strip object
 Apa102Pi strip_one; 
