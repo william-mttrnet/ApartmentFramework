@@ -24,8 +24,10 @@ void Apa102Pi::begin(uint8_t *led_array, uint32_t num_leds, uint8_t brightness, 
     this->brightness = brightness;
     this->led_array_size = this->num_leds * 4 + 8; 
     
-    // SPI INIT BEGIN // 
     this->channel = spi_channel;
+    
+    // SPI INIT BEGIN // 
+    
     int mode = 0; 
     int speed = 5000000;
     // Open up the spi driver!

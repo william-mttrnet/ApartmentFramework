@@ -24,6 +24,7 @@ class Sk6812Pi{
         
         // Higher Level led abstraction stuff
         uint32_t num_leds; 
+        
     private: 
         // LED array stuff
         uint8_t *led_array;
