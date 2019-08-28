@@ -1,5 +1,5 @@
-#ifndef _APA102_H
-#define _APA102_H
+#ifndef _SK6812RGBW_HPP
+#define _SK6812RGBW_HPP
 
 // Raspberry Pi Hardware Dependencies
 #include <iostream>
@@ -8,16 +8,16 @@
 #include <unistd.h>
 #include "rgb_strip_common.hpp"
 
-class Apa102Pi{
+class Sk6812RgbwPi{
     public: 
         // Setup function
         void begin(uint8_t *led_array, uint32_t num_leds, uint8_t brightness, int spi_channel);
         
         // Sets the LED to a specific color
-        void set(uint8_t r, uint8_t g, uint8_t b, uint32_t led);
+        void set(uint8_t r, uint8_t g, uint8_t b, uint8_t w, uint32_t led);
         
         // LEDS LEd to a specific rgb_t color value 
-        void set(rgb_t col, uint32_t led);
+        void set(rgbw_t col, uint32_t led);
         
         // Sends over new LED data over SPI
         void update(void);
