@@ -1,6 +1,6 @@
 #This sample makefile has been setup for a project which contains the following files: main.h, ap-main.c, ap-main.h, ap-gen.c, ap-gen.h   Edit as necessary for your project
 
-# to run: sudo ./main -D0  --led-slowdown-gpio=2  --led-cols=64 --led-gpio-mapping=adafruit-hat-pwm
+# to run: sudo ./led_testing -D0  --led-slowdown-gpio=2  --led-cols=64 --led-gpio-mapping=adafruit-hat-pwm
 
 #Change output_file_name.a below to your desired executible filenames
 
