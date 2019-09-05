@@ -1,3 +1,6 @@
 [submodule "ApartmentFrameworkEmbedded/src/ApartmentProtobuff"]
 	path = ApartmentFrameworkEmbedded/src/ApartmentProtobuff
 	url = git@github.com:william-mttrnet/ApartmentProtobuff.git
+[submodule "LEDControlLinux/matrix"]
+	path = LEDControlLinux/matrix
+	url = https://github.com/hzeller/rpi-rgb-led-matrix.git
