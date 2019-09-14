@@ -4,6 +4,7 @@
 
 // Our Own Modules
 #include "apa102.h"
+#include "sk6812rgbw.hpp"
 #include "udp_frame.h"
 #include "udp_low.hpp"
 
@@ -12,12 +13,18 @@
 // LED strip object
 Apa102Pi strip_one; 
 
+Sk6812RgbwPi strip_two; 
+
 // Socket object recieving data
 UDPFrame serv_socket; 
-uint8_t led_array[NUM_LEDS * 4 + 8];
+uint8_t led_array[NUM_LEDS * 16 + 200];
 
 int main(void){
     strip_one.begin(led_array, NUM_LEDS, 255, 0);
+<<<<<<< HEAD
+=======
+    //strip_two.begin(led_array, NUM_LEDS, 255, 0);
+>>>>>>> 730a18e7559b4fcb19dab86876701c9ba7c4dab2
     serv_socket.begin(5050);
     
     for(;;){

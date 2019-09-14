@@ -40,6 +40,7 @@ class UDPFrame{
         uint8_t out_array[PACKET_MAX_SIZE]; 
     
     private:
+        // udp socket descriptor
         int sock_fd; 
 };
 
