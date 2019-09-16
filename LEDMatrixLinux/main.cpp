@@ -4,6 +4,7 @@
 #include "udp_frame.h"
 #include "udp_low.h"
 #include "rpi-rgb-led-matrix/include/led-matrix.h"
+#include "matrix_helper.h"
 
 using rgb_matrix::GPIO;
 using rgb_matrix::RGBMatrix;
@@ -12,54 +13,56 @@ using rgb_matrix::Canvas;
 // Socket object recieving data
 UDPFrame serv_socket; 
 
-void packet_to_matrix(void);
+MatrixHelper matrix_helper; 
+
+void run_main_loop(void);
 
 int main(int argc, char *argv[]){
-    serv_socket.begin(5050);
     
+    // UDP SOCKET BEGIN // 
+    serv_socket.begin(5050);
+    // UDP SOCKET END //
+
+    // MATRIX SETUP BEGIN // 
     RGBMatrix::Options matrix_options;
     rgb_matrix::RuntimeOptions runtime_opt;
-    
-    if (!rgb_matrix::ParseOptionsFromFlags(&argc, &argv, &matrix_options, &runtime_opt)) {
-       
-    }
-  
-    rgb_matrix::RGBMatrix *matrix =  rgb_matrix::CreateMatrixFromOptions(matrix_options,
-                                                          runtime_opt);
-    if (matrix == NULL)
-        return 1;
 
-    matrix->SetBrightness(100);
-    matrix->Clear();
-    
-    rgb_matrix::FrameCanvas *offscreen = matrix->CreateFrameCanvas();
-    offscreen->Clear();
-    
-    offscreen->SetPixel(0, 0, 100, 100, 100);
-    for(uint8_t i = 0; i < 32; i++){
-        for(uint8_t j = 0; j < 64; j++){
-        matrix->SetPixel(j, i, 100, 100, 100);
-        delay(1);
-        }
-    }
-    
-    for(;;){
-        // Waiting for data
-        serv_socket.receive();
+    if (!rgb_matrix::ParseOptionsFromFlags(&argc, &argv, &matrix_options, &runtime_opt)) {
         
-        uint8_t m = 0; 
-        for(uint8_t i = 0; i < 4; i++){
-            if(serv_socket.in_array[i] == 15)
-                m++;
-        }
-        if(m == 4){
-            for(uint32_t i = 0; i < 2048; i++){
-                offscreen->SetPixel(i%64, 31 - uint32_t(i/64), serv_socket.in_array[i * 3 + 4], serv_socket.in_array[i * 3 + 5], serv_socket.in_array[i * 3 + 6]);
-            }
-            matrix->SwapOnVSync(offscreen);
-        }            
     }
+    rgb_matrix::RGBMatrix *matrix =  rgb_matrix::CreateMatrixFromOptions(matrix_options,
+                                                            runtime_opt);
+    // Attach pointere to the matrix for the matrix helper task 
+    matrix_helper.Begin(matrix);
+
+    // Attach the socket to our matrix helper class
+    matrix_helper.AttachSocket(&serv_socket);
+    
+    // MATRIX SETUP END // 
+    
+    // Actual main function here. 
+    run_main_loop();
+    
+    // Not sure how we would get here, but just because. 
+    return 1; 
 }
 
 
+void run_main_loop(void){
+    for(;;){
+        // Waiting for a new packet of data. 
+        serv_socket.receive();
+            
+        // If there is new frame data. Then let's 
+        // Tell our matrix helper to send out the data. 
+        if(serv_socket.NewMatrixFrame())
+            matrix_helper.GetFrame();
+        
+        // If there is new text data. 
+        // Then let's tell our matrix helper to send 
+        // out the data. 
+        if(serv_socket.NewMatrixText())
+            matrix_helper.GetText();
+    }
+}
 

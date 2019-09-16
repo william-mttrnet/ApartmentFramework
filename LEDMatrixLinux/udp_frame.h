@@ -16,7 +16,7 @@
 #include <arpa/inet.h>
 
 #define PACKET_MAX_SIZE 32768
-// Object wrapper for UDP c function. Only use a single instance of this at a time!
+// Object wrapper for UDP c function. Only use a single instance of this at a time. 
 class UDPFrame{
     public: 
         
@@ -29,8 +29,12 @@ class UDPFrame{
         // Send packet array to latest ip address and port. 
         void send(void);
         
-        // Send to packet array to a desired ip address and port
+        // Send to packet array to a desired ip address and port.
         void sendto(uint16_t port, const char *arr);
+        
+        // Check message ID to see if it's a new frame coming in. 
+        bool NewMatrixFrame(void);
+        bool NewMatrixText(void);
         
         // In and out arrays. 
         uint8_t in_array[PACKET_MAX_SIZE];
@@ -38,7 +42,10 @@ class UDPFrame{
         
         uint16_t latest_packet_out_size = 0;
         uint8_t out_array[PACKET_MAX_SIZE]; 
-    
+        
+        // First four bytes get unpacked into a "latest packet id" 
+        uint32_t latest_packet_id; 
+        
     private:
         // udp socket descriptor
         int sock_fd; 
