@@ -5,6 +5,7 @@
 #include "udp_low.h"
 #include "rpi-rgb-led-matrix/include/led-matrix.h"
 #include "matrix_helper.h"
+#include "stdlib.h"
 
 using rgb_matrix::GPIO;
 using rgb_matrix::RGBMatrix;
@@ -28,7 +29,7 @@ int main(int argc, char *argv[]){
     rgb_matrix::RuntimeOptions runtime_opt;
 
     if (!rgb_matrix::ParseOptionsFromFlags(&argc, &argv, &matrix_options, &runtime_opt)) {
-        
+    
     }
     rgb_matrix::RGBMatrix *matrix =  rgb_matrix::CreateMatrixFromOptions(matrix_options,
                                                             runtime_opt);

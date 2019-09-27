@@ -24,6 +24,8 @@ public:
     void GetFrame(void);
     // Take's latest packet data from UDP socket, and turns it into scrowling text. 
     void GetText(void);
+    
+    void cdl_animate(void);
 private:
     rgb_matrix::RGBMatrix *matrix;
     rgb_matrix::FrameCanvas *offscreen;

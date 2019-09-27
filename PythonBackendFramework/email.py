@@ -42,7 +42,7 @@ email_handler = None
 def main():
     print("Creating email handler...")
     global email_handler
-    email_handler = EmailHandler("william@matternet.us", "+Hi18279455")
+    email_handler = EmailHandler("tinanh1@uci.edu", "saphannie1s.")
 
     if(email_handler.connect()):
         print("Mailbox connected!")

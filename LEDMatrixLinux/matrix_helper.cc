@@ -1,4 +1,5 @@
 #include "matrix_helper.h"
+#include "stdlib.h"
 
 using rgb_matrix::GPIO;
 using rgb_matrix::RGBMatrix;
@@ -25,6 +26,7 @@ void MatrixHelper::Begin(rgb_matrix::RGBMatrix *matrix_passthrough){
             delay(1);
         }
     }
+    
 }
 
 void MatrixHelper::AttachSocket(UDPFrame *serve_socket){
@@ -40,4 +42,59 @@ void MatrixHelper::GetFrame(void){
 
 void MatrixHelper::GetText(void){
     // TODO
+}
+
+void MatrixHelper::cdl_animate(void){
+    
+    // Setting the whole matrix black just as a starter frame
+    for(uint8_t i = 0; i < 32; i++){
+        for(uint8_t j = 0; j < 64; j++){
+            this->matrix->SetPixel(j, i, 255 - (3 * j), 255 - (4 * j), 255 - j/2);
+            delay(1);
+        }
+    }
+    
+    delay(6000);
+    
+    for(uint8_t i = 0; i < 32; i++){
+        for(uint8_t j = 0; j < 64; j++){
+            this->matrix->SetPixel(rand() % 64, rand() % 32, rand() % 255, rand() % 255, rand() % 255);
+            delay(1);
+        }
+    }
+    
+    for(uint8_t i = 0; i < 32; i++){
+        for(uint8_t j = 0; j < 64; j++){
+            this->matrix->SetPixel(j, i, 255 - (6 * i), 255 - (8 * i), 255 - i);
+            delay(1);
+        }
+    }
+    
+    delay(6000);
+    
+    for(uint8_t i = 0; i < 32; i++){
+        for(uint8_t j = 0; j < 64; j++){
+            this->matrix->SetPixel(j, i, 255 - (4 * j), 255 - (4 * j), 255 - j);
+            delay(1);
+        }
+    }
+    
+    delay(6000);
+    
+    for(uint8_t i = 0; i < 32; i++){
+        for(uint8_t j = 0; j < 64; j++){
+            this->matrix->SetPixel(j, i, rand() % 255, rand() % 255, rand() % 255);
+            delay(1);
+        }
+    }
+    
+    for(uint8_t i = 0; i < 32; i++){
+        for(uint8_t j = 0; j < 64; j++){
+            this->matrix->SetPixel(j, i, 7 * i, 255 - 7*i, 2 * i);
+            delay(1);
+        }
+    }
+    
+    delay(6000);
+
 }
